@@ -22,6 +22,9 @@ public:
     void swap(Vector<T>& obj);
     void clear();
     void print() const;
+    void reserve(const int& size);
+    void resize(const int& size);
+    void resize(const int& size,const T& value);
 
     int size() const;
     int capacity() const;
@@ -209,3 +212,126 @@ template <typename T> bool Vector<T>::empty() const
 {
     return m_size == 0;
 }
+
+
+template <typename T>
+void Vector<T>::reserve(const int& size)
+{
+	if(m_capacity < size)
+	{
+		T* temp = new T[size];
+		for(int i = 0;i < m_size;++i)
+		{
+			temp[i] = ptr[i];
+		}
+		delete[] ptr;
+		ptr = temp;
+		temp = nullptr;
+		m_capacity = size;
+	}
+}
+	
+template <typename T>
+void Vector<T>::resize(const int& size)
+{
+    if (size < m_capacity)
+    {
+        if (size <= m_size)
+        {
+            while (m_size > size)
+            {
+                --size;
+            }
+            
+        }
+        else
+        {
+            while (m_size < size)
+            {
+                ptr[m_size] = T();
+                ++m_size
+            }
+            
+        }
+        return;
+    }
+    
+    if(size > m_capacity)
+    {
+        while (m_capacity < size)
+        {
+            m_capacity = m_capacity * 2 + 1;
+        }
+
+        T* temp = new T[m_capacity];       
+
+        
+       
+        for (size_t i = 0; i < m_size; ++i)
+        {
+            temp[i] = ptr[i];
+        }
+        
+        while (m_size < size)
+        {
+            temp[m_size] = T();
+            ++m_size;
+        }
+        
+        delete[] ptr;
+        ptr = temp;
+        temp = nullptr;
+    }
+}
+
+
+template <typename T>
+void Vector<T>::resize(const int& size,const T& value)
+{
+    
+    if (size > m_size)
+    {
+        if (size > m_capacity)
+        {
+            while (m_capacity < size)
+            {
+                m_capacity = m_capacity * 2 + 1;
+            }
+
+                T* temp = new T[m_capacity];       
+       
+            for (size_t i = 0; i < m_size; ++i)
+            {
+                temp[i] = ptr[i];
+            }
+        
+            while (m_size < size)
+            {
+                temp[m_size] = value;
+                ++m_size;
+            }
+            
+            delete[] ptr;
+            ptr = temp;
+            temp = nullptr;
+            return;
+        }
+        
+        if (size <= m_capacity)
+        {
+            while (m_size < size)
+            {
+                temp[m_size] = value;
+                ++m_size;
+            }
+        }
+    }
+    else
+    {
+        std::cout<<"The given size is less than the vector's size!"<<std::endl;
+    }
+
+}
+
+
+
